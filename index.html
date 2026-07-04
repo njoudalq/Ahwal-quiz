@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مسابقة الأنظمة | الأحوال المدنية والجنسية السعودية</title>
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --primary: #1f4f3a;
+      --primary-light: #e7f0ea;
+      --danger: #b42318;
+      --success: #177245;
+      --border: #ded7ca;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 16px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1f4f3a, #2d6a4f);
+      color: white;
+      border-radius: 22px;
+      padding: 30px 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 14px 30px rgba(31, 79, 58, 0.18);
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #e9f5ee;
+      font-size: 16px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .pill {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+    }
+
+    .question-title {
+      font-weight: 800;
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    label.option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.18s ease;
+      background: #fff;
+    }
+
+    label.option:hover {
+      background: var(--primary-light);
+      border-color: #b9cdbc;
+    }
+
+    input[type="radio"] {
+      margin-top: 8px;
+      accent-color: var(--primary);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .submit {
+      background: var(--primary);
+      color: white;
+    }
+
+    .reset {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .result {
+      display: none;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 18px;
+      padding: 22px;
+      margin-top: 18px;
+    }
+
+    .result h2 {
+      margin: 0 0 8px;
+      color: var(--primary);
+    }
+
+    .explain {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+
+    .correct {
+      border-color: rgba(23,114,69,0.45) !important;
+      background: #ecfdf3 !important;
+    }
+
+    .wrong {
+      border-color: rgba(180,35,24,0.45) !important;
+      background: #fef3f2 !important;
+    }
+
+    .explain.good {
+      background: #ecfdf3;
+      color: var(--success);
+      border: 1px solid rgba(23,114,69,0.25);
+    }
+
+    .explain.bad {
+      background: #fef3f2;
+      color: var(--danger);
+      border: 1px solid rgba(180,35,24,0.25);
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 {
+        font-size: 23px;
+      }
+      .card {
+        padding: 16px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <h1>مسابقة الأنظمة</h1>
+      <p>اختبار قانوني للموظفين في نظام الأحوال المدنية ولائحته التنفيذية، ونظام الجنسية العربية السعودية ولائحته التنفيذية.</p>
+      <div class="meta">
+        <span class="pill">10 أسئلة</span>
+        <span class="pill">اختيارات متعددة</span>
+        <span class="pill">تصحيح فوري</span>
+      </div>
+    </section>
+
+    <form id="quizForm"></form>
+
+    <div class="actions">
+      <button class="submit" type="button" onclick="submitQuiz()">عرض النتيجة</button>
+      <button class="reset" type="button" onclick="resetQuiz()">إعادة الاختبار</button>
+    </div>
+
+    <section id="result" class="result"></section>
+
+    <p class="footer">إعداد اختبار تدريبي لأغراض التثقيف القانوني الداخلي.</p>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        q: "إذا لم يرد في نظام الأحوال المدنية نص ينظم مسألة إجرائية معينة، فإن المرجع الأقرب نظامًا يكون:",
+        options: [
+          "نظام الإثبات",
+          "اللائحة التنفيذية لنظام الأحوال المدنية",
+          "نظام المرافعات الشرعية",
+          "نظام الإجراءات الجزائية"
+        ],
+        answer: 1,
+        explain: "اللائحة التنفيذية تفصل إجراءات تطبيق النظام، لذلك تكون المرجع المباشر في المسائل الإجرائية المرتبطة بالنظام."
+      },
+      {
+        q: "الأصل في قيد الواقعات المدنية يكون استنادًا إلى:",
+        options: [
+          "أقوال صاحب الشأن فقط",
+          "الوثائق والمستندات النظامية المعتمدة",
+          "شهادة شاهدين فقط",
+          "إقرار العمدة"
+        ],
+        answer: 1,
+        explain: "القيد في السجل المدني لا يقوم على القول المجرد، بل على مستندات وإجراءات نظامية."
+      },
+      {
+        q: "أي من الآتي لا يعد من الوقائع المدنية المقيدة في سجلات الأحوال المدنية؟",
+        options: [
+          "الميلاد",
+          "الوفاة",
+          "تغيير المهنة",
+          "الطلاق"
+        ],
+        answer: 2,
+        explain: "تغيير المهنة بيان مرتبط بالسجل، لكنه ليس واقعة مدنية مثل الميلاد أو الوفاة أو الزواج أو الطلاق."
+      },
+      {
+        q: "القيد في السجل المدني من الناحية النظامية يعد:",
+        options: [
+          "بيانًا صحيحًا إلى أن يثبت خلافه وفق الإجراءات النظامية",
+          "بيانًا قابلًا للتعديل بقرار أي موظف",
+          "بيانًا غير ملزم للجهات الحكومية",
+          "إجراءً شكليًا لا ينتج أثرًا"
+        ],
+        answer: 0,
+        explain: "بيانات السجل المدني لها حجية إدارية، ولا تعدل إلا وفق الإجراءات والضوابط المحددة."
+      },
+      {
+        q: "منح الجنسية العربية السعودية للأجنبي بعد استيفاء الشروط النظامية يعد:",
+        options: [
+          "حقًا مكتسبًا بمجرد تقديم الطلب",
+          "التزامًا واجبًا على الإدارة",
+          "سلطة تقديرية للجهة المختصة وفق النظام",
+          "اختصاصًا قضائيًا مباشرًا"
+        ],
+        answer: 2,
+        explain: "استيفاء الشروط لا يجعل المنح تلقائيًا، لأن قرار التجنس يخضع للسلطة التقديرية النظامية."
+      },
+      {
+        q: "من الشروط العامة في طالب التجنس بالجنسية العربية السعودية:",
+        options: [
+          "أن يكون حسن السيرة والسلوك وألا يكون محكومًا عليه في جريمة أخلاقية لمدة تزيد على ستة أشهر",
+          "أن يكون مالكًا لعقار داخل المملكة",
+          "أن يكون متزوجًا من سعودية فقط",
+          "أن تكون إقامته سنة واحدة"
+        ],
+        answer: 0,
+        explain: "حسن السيرة والسلوك وعدم صدور حكم جنائي أخلاقي لمدة محددة من الشروط الجوهرية."
+      },
+      {
+        q: "اللجنة المختصة بدراسة طلبات التجنس تقوم أساسًا بـ:",
+        options: [
+          "منح الجنسية مباشرة",
+          "دراسة الطلب وتقدير مدى استيفاء الشروط ورفع التوصية",
+          "إصدار بطاقة الهوية الوطنية",
+          "قيد واقعة الميلاد فقط"
+        ],
+        answer: 1,
+        explain: "اللجنة تدرس الطلب وتوصي، لكنها لا تحل محل صاحب الاختصاص في قرار المنح."
+      },
+      {
+        q: "تصحيح القيود الجوهرية في السجل المدني يكون:",
+        options: [
+          "بطلب شفهي من صاحب الشأن",
+          "بقرار مباشر من الموظف المختص دون مستند",
+          "وفق الإجراءات والجهة المختصة التي يحددها النظام واللائحة",
+          "بموافقة شاهدين فقط"
+        ],
+        answer: 2,
+        explain: "البيانات الجوهرية لا تعدل إلا وفق مسار نظامي محدد حماية لحجية السجل."
+      },
+      {
+        q: "إذا فقد السعودي جنسيته وفق حالة نظامية، فإن أثر ذلك على زوجته وأولاده:",
+        options: [
+          "يقع تلقائيًا في جميع الأحوال",
+          "لا يقع أبدًا",
+          "يخضع للأحكام والشروط التي نص عليها نظام الجنسية",
+          "يترك لاختيار جهة العمل"
+        ],
+        answer: 2,
+        explain: "الأثر لا يفترض تلقائيًا، بل يتحدد وفق النصوص الخاصة في نظام الجنسية."
+      },
+      {
+        q: "أي عبارة أدق نظامًا بشأن الميلاد داخل المملكة؟",
+        options: [
+          "كل مولود داخل المملكة يكون سعوديًا",
+          "مكان الميلاد وحده يكسب الجنسية السعودية",
+          "الجنسية السعودية تثبت وفق شروط النظام ولا يكفي مجرد الميلاد داخل المملكة",
+          "كل مولود لأم أجنبية داخل المملكة يكتسب الجنسية مباشرة"
+        ],
+        answer: 2,
+        explain: "نظام الجنسية لا يجعل مكان الميلاد وحده سببًا كافيًا لاكتساب الجنسية السعودية."
+      }
+    ];
+
+    const form = document.getElementById("quizForm");
+
+    function renderQuiz() {
+      form.innerHTML = "";
+      questions.forEach((item, index) => {
+        const card = document.createElement("section");
+        card.className = "card";
+        card.id = `question-${index}`;
+
+        const title = document.createElement("div");
+        title.className = "question-title";
+        title.textContent = `${index + 1}. ${item.q}`;
+
+        const options = document.createElement("div");
+        options.className = "options";
+
+        item.options.forEach((option, optionIndex) => {
+          const label = document.createElement("label");
+          label.className = "option";
+          label.dataset.question = index;
+          label.dataset.option = optionIndex;
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = `q${index}`;
+          input.value = optionIndex;
+
+          const span = document.createElement("span");
+          span.textContent = option;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          options.appendChild(label);
+        });
+
+        const explain = document.createElement("div");
+        explain.className = "explain";
+        explain.id = `explain-${index}`;
+
+        card.appendChild(title);
+        card.appendChild(options);
+        card.appendChild(explain);
+        form.appendChild(card);
+      });
+    }
+
+    function submitQuiz() {
+      let score = 0;
+      let answered = 0;
+
+      questions.forEach((item, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const labels = document.querySelectorAll(`label[data-question="${index}"]`);
+        const explain = document.getElementById(`explain-${index}`);
+
+        labels.forEach(label => {
+          label.classList.remove("correct", "wrong");
+          const optionIndex = Number(label.dataset.option);
+          if (optionIndex === item.answer) {
+            label.classList.add("correct");
+          }
+        });
+
+        if (selected) {
+          answered++;
+          const selectedValue = Number(selected.value);
+          if (selectedValue === item.answer) {
+            score++;
+            explain.className = "explain good";
+            explain.textContent = `إجابة صحيحة. ${item.explain}`;
+          } else {
+            const selectedLabel = document.querySelector(`label[data-question="${index}"][data-option="${selectedValue}"]`);
+            selectedLabel.classList.add("wrong");
+            explain.className = "explain bad";
+            explain.textContent = `إجابة غير صحيحة. الإجابة الصحيحة: ${item.options[item.answer]}. ${item.explain}`;
+          }
+          explain.style.display = "block";
+        } else {
+          explain.className = "explain bad";
+          explain.textContent = "لم تتم الإجابة عن هذا السؤال.";
+          explain.style.display = "block";
+        }
+      });
+
+      const result = document.getElementById("result");
+      const percentage = Math.round((score / questions.length) * 100);
+      let message = "تحتاج إلى مراجعة أكثر.";
+      if (percentage >= 90) message = "ممتاز. مستوى متقدم.";
+      else if (percentage >= 70) message = "جيد جدًا. لديك فهم جيد.";
+      else if (percentage >= 50) message = "جيد. تحتاج إلى تدقيق بعض الفروق النظامية.";
+
+      result.style.display = "block";
+      result.innerHTML = `
+        <h2>النتيجة: ${score} من ${questions.length}</h2>
+        <p>النسبة: ${percentage}%</p>
+        <p>${message}</p>
+        <p>عدد الأسئلة المجابة: ${answered} من ${questions.length}</p>
+      `;
+
+      result.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function resetQuiz() {
+      renderQuiz();
+      const result = document.getElementById("result");
+      result.style.display = "none";
+      result.innerHTML = "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>
